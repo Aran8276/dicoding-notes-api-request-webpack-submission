@@ -1,0 +1,17 @@
+{
+  "name": "dicoding-ajax-webpack-submission",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "aran8276",
+  "license": "ISC",
+  "description": "Tugas submission utk final project frontend dicoding thing",
+  "devDependencies": {
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  }
+}
