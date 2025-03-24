@@ -7,21 +7,28 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-    ],
+        use: ["style-loader", "css-loader"]
+      }
+    ]
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
+    filename: "main.js"
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./index.html"
+    })
+  ],
   mode: "production",
   devServer: {
     static: {
-      directory: path.join(__dirname, "/"),
+      directory: path.join(__dirname, "/")
+    },
+    client: {
+      logging: "error"
     },
     compress: true,
-    port: 9000,
-  },
+    port: 9000
+  }
 };
