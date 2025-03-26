@@ -106,12 +106,18 @@ const formStyle = `
         border-radius: 4px;
     }
     button {
+        height: 50px;
         padding: 0.5rem;
         background: #4CAF50;
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+    }
+    button[disabled] {
+        background:rgb(153, 226, 155);
+        cursor: default;
+    
     }
 </style>`;
 

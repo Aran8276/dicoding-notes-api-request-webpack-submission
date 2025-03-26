@@ -120,28 +120,38 @@ class NoteForm extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.loading = false;
   }
 
   // method ini digunakan untuk menambahkan NoteItem baru ke NoteList dengan membaca inputan pada form
-  attachSubmitEvent() {
-    this.shadowRoot.querySelector("form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const title = this.shadowRoot.getElementById("title").value;
-      const body = this.shadowRoot.getElementById("body").value;
-      const newNote = {
-        id: `notes-${Math.random().toString(36).substr(2, 9)}`,
-        title,
-        body,
-        createdAt: new Date().toISOString(),
-        archived: false
-      };
+  async attachSubmitEvent() {
+    this.shadowRoot
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = this.shadowRoot.getElementById("title").value;
+        const body = this.shadowRoot.getElementById("body").value;
+        const newNote = {
+          id: `notes-${Math.random().toString(36).substr(2, 9)}`,
+          title,
+          body,
+          createdAt: new Date().toISOString(),
+          archived: false
+        };
 
-      postNote(newNote.title, newNote.body);
+        this.loading = true;
+        this.render();
 
-      // const noteList = document.querySelector("note-list");
-      // noteList.addNote(newNote);
-      this.shadowRoot.querySelector("form").reset();
-    });
+        try {
+          console.log(newNote);
+          await postNote(newNote.title, newNote.body);
+        } finally {
+          this.loading = false;
+          this.render();
+          this.attachSubmitEvent();
+          this.shadowRoot.querySelector("form").reset();
+        }
+      });
   }
 
   // spt di NoteList, kepanggil setelah masuk ke dom
@@ -158,9 +168,26 @@ class NoteForm extends HTMLElement {
             <form>
               <input type="text" id="title" placeholder="Title" required>
               <textarea id="body" placeholder="Body" rows="4" required></textarea>
-              <button type="submit">Add Note</button>
+              <button id="enabled-btn" type="submit">
+                  Add Note
+              </button>
+              <button id="disabled-btn" disabled type="button">
+                  <loading-indicator id="loading"></loading-indicator>
+              </button>
             </form>
+
           `;
+
+    const enabledBtn = this.shadowRoot.getElementById("enabled-btn");
+    const disabledBtn = this.shadowRoot.getElementById("disabled-btn");
+
+    if (this.loading) {
+      enabledBtn.style.display = "none";
+      disabledBtn.style.display = "block";
+    } else if (!this.loading) {
+      enabledBtn.style.display = "block";
+      disabledBtn.style.display = "none";
+    }
   }
 }
 
